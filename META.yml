@@ -4,20 +4,22 @@ author:
   - 'David Mertens, E<lt>dcmertens.perl@gmail.comE<gt>.'
 build_requires:
   ExtUtils::CBuilder: 0
+  ExtUtils::ParseXS: 3.05
 configure_requires:
-  Module::Build: 0.38
+  Module::Build: 0
+  PDL: v2.4.9_14
+  Prima: 1.33
 dynamic_config: 1
-generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.112150'
+generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.113640'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: PDL-Drawing-Prima
 requires:
-  ExtUtils::ParseXS: 3.05
   PDL: v2.4.9_14
   Prima: 1.33
   perl: v5.8.0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.01
+version: 0.02
