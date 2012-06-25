@@ -14,6 +14,10 @@ BEGIN {
 }
 use PDL::PP (qw(PDL::Drawing::Prima PDL::Drawing::Prima), $base_name);
 
+# This file creates the functions for this package's namespace:
+# uncomment if the meta-provides key in Build.PL doesn't work; remove if it does
+#package PDL::Drawing::Prima;
+
 # Set the module version from the version stashed in the M::B object. The string
 # passed to pp_setversion must include the quotes to ensure that it is processed
 # as a string from the actual module:
@@ -2844,7 +2848,7 @@ ModuleMaterial
 # The code and badcode are nearly identical, so I'll write it once here and
 # do the handful of manipulations below.
 
-@properties = qw(colors backColors clipRects fillPatterns lineEnds
+@properties = qw(colors backColors clipRects fillPatterns fillWindings lineEnds
 				linePatterns lineWidths rops rop2s translates);
 	# I'll need to allocate the memory for each Symbol drawn:
 $code = 	q{
@@ -3125,7 +3129,7 @@ are bad, the symbol is not drawn at that x/y coordinate.
 =pod
 
 Applicable properties are likely to include colors, backColors, clipRects,
-fillPatterns, lineEnds, linePatterns, lineWidths, rops, rop2s, and translates.
+fillPatterns, fillWindings, lineEnds, linePatterns, lineWidths, rops, rop2s, and translates.
 However, this list could be out of date. If you've installed this module on your own
 machine, the documentation is guaranteed to describe the applicable properties.
 
