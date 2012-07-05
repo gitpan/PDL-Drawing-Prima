@@ -11,7 +11,7 @@ $inc =~ s/-I//g;
 my @incs = ($inc, @{$Prima::Config::Config{incpaths}});
 
 # Explicitly set the version here; all .pm.PL files will use this:
-my $version = '0.03';
+my $version = '0.04';
 
 my $build = Module::Build->new(
 	module_name => 'PDL::Drawing::Prima',
@@ -19,7 +19,7 @@ my $build = Module::Build->new(
 	dist_version => $version,
 	license  => 'perl',
 	configure_requires => {
-		PDL						=> '2.4.9_014',
+		PDL						=> '2.4.10',
 		Prima					=> '1.33',
 		# working here - I need to check the smoke reports for the minimum
 		# required version:
@@ -33,7 +33,7 @@ my $build = Module::Build->new(
 	requires => {
 		# Due to the use of PerlIO, I need at least 5.8:
 		perl					=> '5.8.0',
-		PDL						=> '2.4.9_014',
+		PDL						=> '2.4.10',
 		Prima					=> '1.33',
 	},
 	needs_compiler => 1,

@@ -32,13 +32,13 @@
       "configure" : {
          "requires" : {
             "Module::Build" : "0",
-            "PDL" : "v2.4.9_14",
+            "PDL" : "v2.4.10",
             "Prima" : "1.33"
          }
       },
       "runtime" : {
          "requires" : {
-            "PDL" : "v2.4.9_14",
+            "PDL" : "v2.4.10",
             "Prima" : "1.33",
             "perl" : "v5.8.0"
          }
@@ -47,11 +47,11 @@
    "provides" : {
       "PDL::Drawing::Prima" : {
          "file" : "lib/PDL/Drawing/Prima.pm.PL",
-         "version" : "0.03"
+         "version" : "0.04"
       },
       "PDL::Drawing::Prima::Utils" : {
          "file" : "lib/PDL/Drawing/Prima/Utils.pm.PL",
-         "version" : "0.03"
+         "version" : "0.04"
       }
    },
    "release_status" : "stable",
@@ -66,5 +66,5 @@
          "url" : "http://github.com/run4flat/PDL-Drawing-Prima"
       }
    },
-   "version" : "0.03"
+   "version" : "0.04"
 }
