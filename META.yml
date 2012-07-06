@@ -4,7 +4,7 @@ author:
   - 'David Mertens, E<lt>dcmertens.perl@gmail.comE<gt>.'
 build_requires:
   ExtUtils::CBuilder: 0
-  ExtUtils::ParseXS: 0
+  ExtUtils::ParseXS: 3.0
 configure_requires:
   Module::Build: 0
   PDL: v2.4.10
@@ -25,10 +25,10 @@ no_index:
 provides:
   PDL::Drawing::Prima:
     file: lib/PDL/Drawing/Prima.pm.PL
-    version: 0.04
+    version: 0.05
   PDL::Drawing::Prima::Utils:
     file: lib/PDL/Drawing/Prima/Utils.pm.PL
-    version: 0.04
+    version: 0.05
 requires:
   PDL: v2.4.10
   Prima: 1.33
@@ -37,4 +37,4 @@ resources:
   bugtracker: http://github.com/run4flat/PDL-Drawing-Prima/issues
   license: http://dev.perl.org/licenses/
   repository: http://github.com/run4flat/PDL-Drawing-Prima
-version: 0.04
+version: 0.05
