@@ -47,11 +47,11 @@
    "provides" : {
       "PDL::Drawing::Prima" : {
          "file" : "lib/PDL/Drawing/Prima.pm.PL",
-         "version" : "0.05"
+         "version" : "0.06"
       },
       "PDL::Drawing::Prima::Utils" : {
          "file" : "lib/PDL/Drawing/Prima/Utils.pm.PL",
-         "version" : "0.05"
+         "version" : "0.06"
       }
    },
    "release_status" : "stable",
@@ -66,5 +66,5 @@
          "url" : "http://github.com/run4flat/PDL-Drawing-Prima"
       }
    },
-   "version" : "0.05"
+   "version" : "0.06"
 }
