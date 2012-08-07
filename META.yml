@@ -6,7 +6,7 @@ build_requires:
   ExtUtils::CBuilder: 0
   ExtUtils::ParseXS: 3.0
 configure_requires:
-  Module::Build: 0
+  Module::Build: 0.28
   PDL: v2.4.10
   Prima: 1.33
 dynamic_config: 1
@@ -25,10 +25,10 @@ no_index:
 provides:
   PDL::Drawing::Prima:
     file: lib/PDL/Drawing/Prima.pm.PL
-    version: 0.06
+    version: 0.07
   PDL::Drawing::Prima::Utils:
     file: lib/PDL/Drawing/Prima/Utils.pm.PL
-    version: 0.06
+    version: 0.07
 requires:
   PDL: v2.4.10
   Prima: 1.33
@@ -37,4 +37,4 @@ resources:
   bugtracker: http://github.com/run4flat/PDL-Drawing-Prima/issues
   license: http://dev.perl.org/licenses/
   repository: http://github.com/run4flat/PDL-Drawing-Prima
-version: 0.06
+version: 0.07
