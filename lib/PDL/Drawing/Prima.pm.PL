@@ -237,6 +237,16 @@ _piddle_of_handles_for(SV * piddle_SV, ...)
 
 =cut
 
+#=head2 piddle_of_fillPatterns_for
+#
+#This function is not yet implemented, but some day it will return piddles
+#for any Prima named fill pattern.
+#
+# It should be able to operate either by calling the fillPattern setter and
+# immediately retrieving the resulting fill pattern, or by accessing the
+# fill pattern collection directly. Don't know why that didn't work when I
+# tried it earlier. Maybe I didn't de-reference the SV double-pointer?
+
 pp_addpm({At=>'Top'},<<'ModuleMaterial');
 
 =head1 METHODS
@@ -284,8 +294,9 @@ pp_addhdr(pp_line_numbers(__LINE__ + 1, <<'HEADER'));
  * method table pointer in the BOOT section. */
 PDrawable_vmt CDrawable;
 
-/* get_size requires this dummy variable */
+/* dummy variables for getter/setter functions called in getter mode */
 Point Point_buffer;
+Rect Rect_buffer;
 
 #define DECLARE_POINT_DATA													\
 	Point * points_to_plot;													\
@@ -3526,15 +3537,6 @@ primitives, but what about bad colors for valid coordinates? I could not draw
 the primitive, defer to the widget's default color, or use the value associated
 with the singular key (i.e. C<color>). But I haven't decided which of these is
 best.
-
-=item "Atomic" Operations
-
-I would like to be able to specify colors, for example, and have the state of
-the widget revert back to the original color after the drawing command has
-finished. In other words, I would like the state of the widget after these
-drawing commands to be the same that it was before these commands. This can be
-implemented by having the drawing commands backup the widget's properties before
-running, and restoring them afterwards.
 
 =back
 
