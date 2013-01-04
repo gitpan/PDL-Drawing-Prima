@@ -25,10 +25,10 @@ no_index:
 provides:
   PDL::Drawing::Prima:
     file: lib/PDL/Drawing/Prima.pm.PL
-    version: 0.08
+    version: 0.09
   PDL::Drawing::Prima::Utils:
     file: lib/PDL/Drawing/Prima/Utils.pm.PL
-    version: 0.08
+    version: 0.09
 requires:
   PDL: v2.4.10
   Prima: 1.35
@@ -37,4 +37,4 @@ resources:
   bugtracker: http://github.com/run4flat/PDL-Drawing-Prima/issues
   license: http://dev.perl.org/licenses/
   repository: http://github.com/run4flat/PDL-Drawing-Prima
-version: 0.08
+version: 0.09

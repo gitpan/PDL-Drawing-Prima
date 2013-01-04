@@ -11,7 +11,7 @@ $inc =~ s/-I//g;
 my @incs = ($inc, @{$Prima::Config::Config{incpaths}});
 
 # Explicitly set the version here; all .pm.PL files will use this:
-my $version = '0.08';
+my $version = '0.09';
 
 my $build = Module::Build->new(
 	module_name => 'PDL::Drawing::Prima',
@@ -69,19 +69,10 @@ my $build = Module::Build->new(
 	},
 );
 
-# Find the Prima library for linking:
-if ($^O =~ /MS/ or $^O eq 'cygwin') {
-	my $path = $Prima::Config::Config{libs};
-	
-	# Extract the path. This assumes that the path seperator is a single
-	# character, but otherwise is not system-specific. Since it only applies
-	# to MS and Cygwin, I think it'll be fine:
-	die "Unable to determine the Prima library name\n"
-		unless $path =~ s/.(lib)?Prima\.[^.]+$//;
-	# Note that the -L and -l flags are available through Prima's config module
-	# as $Prima::Config::Config{ldlibpathflag} and
-	# $Prima::Config::Config{ldlibflag}. Consider using those.
-	$build->extra_linker_flags("-L$path", "-lPrima");
-}
+# Link to Prima's dynamic library if there are any linker settings.
+# (Big shout out to Dmitry, Rob, and Chris for helping me solve this!!)
+$build->extra_linker_flags(split(/\s+/, $Prima::Config::Config{libs}))
+	if $Prima::Config::Config{libs};
+
 
 $build->create_build_script;
