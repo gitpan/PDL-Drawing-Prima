@@ -4,7 +4,7 @@
       "David Mertens, E<lt>dcmertens.perl@gmail.comE<gt>."
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.3901, CPAN::Meta::Converter version 2.120630",
+   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.132830",
    "license" : [
       "perl_5"
    ],
@@ -47,11 +47,11 @@
    "provides" : {
       "PDL::Drawing::Prima" : {
          "file" : "lib/PDL/Drawing/Prima.pm.PL",
-         "version" : "0.09"
+         "version" : "0.10"
       },
       "PDL::Drawing::Prima::Utils" : {
          "file" : "lib/PDL/Drawing/Prima/Utils.pm.PL",
-         "version" : "0.09"
+         "version" : "0.10"
       }
    },
    "release_status" : "stable",
@@ -66,5 +66,5 @@
          "url" : "http://github.com/run4flat/PDL-Drawing-Prima"
       }
    },
-   "version" : "0.09"
+   "version" : "0.10"
 }

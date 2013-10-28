@@ -227,18 +227,18 @@ my $hsv_to_rgb_code = q{
 				if (h < 0) h = 0;
 				if (h > 360) h = 360;
 				
-				/* Adjust hue to run between 0 and 4 instead of 0 and 360 */
+				/* Adjust hue to run between 0 and 6 instead of 0 and 360 */
 				h /= 60;
 				
-				/* To help understand this, see */
-				/* en.wikipedia.org/wiki/HSL_and_HSV#From_HSV */
+				/* To help understand this, see hsv2rgb from Prima's ColorDialog.pm */
+				/* and also Fig. 24 under en.wikipedia.org/wiki/HSL_and_HSV#From_HSV */
 				i = (int) h;
 				f = h - i;
 				w = v * (1 - s);
 				q = v * (1 - (s * f));
 				t = v * (1 - (s * (1 - f)));
 				
-				if (i == 0) {
+				if (i == 0 || i == 6) {
 					$rgb(m=>0) = v;
 					$rgb(m=>1) = t;
 					$rgb(m=>2) = w;
@@ -492,37 +492,47 @@ BADDOC
 # minmaxforpair #
 #################
 
+my $indx_type = PDL::Types::mapfld(indx => 'convertfunc', 'ppsym');
+$indx_type ||= '';
+
 =head2 minmaxforpair
 
 =cut
 
-pp_addhdr q{
-#include <float.h>
-#include <limits.h>
-};
-
 pp_def('minmaxforpair',
 	Pars => 'x(n); y(n); [o] min_x(); [o] min_y(); [o] max_x(); [o] max_y()',
 	# Good code.
-	Code => q{
-		// Set the initial values for the min/max. Since I know that these will
-		// be good, I can assume that the first value is a good starting guess.
-		$min_x() = $TBSULQFD(SCHAR_MAX,SHRT_MAX,USHRT_MAX,INT_MAX,LLONG_MAX,FLT_MAX,DBL_MAX);
-		$max_x() = $TBSULQFD(SCHAR_MIN,SHRT_MIN,0,INT_MIN,LLONG_MIN,FLT_MIN,DBL_MIN);
-		$min_y() = $TBSULQFD(SCHAR_MAX,SHRT_MAX,USHRT_MAX,INT_MAX,LLONG_MAX,FLT_MAX,DBL_MAX);
-		$max_y() = $TBSULQFD(SCHAR_MIN,SHRT_MIN,0,INT_MIN,LLONG_MIN,FLT_MIN,DBL_MIN);
+	Code => pp_line_numbers(__LINE__, q{
+		// Set the initial values for the min/max. The naive approach is to set
+		// the first value as our starting point, which works fine for integer
+		// types. However, this approach is not guaranteed to work with
+		// floating-point values since inf and nan are valid values in PDL, but
+		// not in this function. So, if it is a floating point value, set the
+		// initial min/max to something that we know will be overridden, and be
+		// sure to check at the end that it is, indeed, overridden.
+		types (BSUL} . $indx_type . q{Q) %{
+			$min_x() = $x(n => 0);
+			$max_x() = $x(n => 0);
+			$min_y() = $y(n => 0);
+			$max_y() = $y(n => 0);
+		%}
+		types (FD) %{
+			// From math.h
+			$min_x() = INFINITY;
+			$max_x() = -INFINITY;
+			$min_y() = INFINITY;
+			$max_y() = -INFINITY;
+		%}
 		
 		loop(n) %{
-			types (BSULQ) %{
+			types (BSULNQ) %{
 				if ($x() < $min_x()) $min_x() = $x();
 				if ($max_x() < $x()) $max_x() = $x();
 				if ($y() < $min_y()) $min_y() = $y();
 				if ($max_y() < $y()) $max_y() = $y();
 			%}
 			types (FD) %{
-				if ($x() == $x() && $y() == $y()				/* nan check */
-						&& $x()*0.0 == 0.0 && $y()*0.0 == 0.0	/* inf check */
-				) {
+				if (isfinite($x()) && isfinite($y())) {
 					if ($x() < $min_x()) $min_x() = $x();
 					if ($max_x() < $x()) $max_x() = $x();
 					if ($y() < $min_y()) $min_y() = $y();
@@ -530,10 +540,25 @@ pp_def('minmaxforpair',
 				}
 			%}
 		%}
-	},
+		
+		// finally, for floats, check if we have finite values. Otherwise set
+		// the piddle to bad.
+		types (FD) %{
+			if (isinf($min_x()) || isinf($min_y())) {
+				$PDLSTATESETBAD(min_x);
+				$SETBAD(min_x());
+				$PDLSTATESETBAD(min_y);
+				$SETBAD(min_y());
+				$PDLSTATESETBAD(max_x);
+				$SETBAD(max_x());
+				$PDLSTATESETBAD(max_y);
+				$SETBAD(max_y());
+			}
+		%}
+	}),
 	# Bad code
 	HandleBad => 1,
-	BadCode => q{
+	BadCode => pp_line_numbers(__LINE__, q{
 		// For bad code, I can't set initial values for min/max as the first
 		// elements of x/y. In fact, I need to assume that possibly all the data
 		// could be bad, so start with that:
@@ -543,11 +568,12 @@ pp_def('minmaxforpair',
 		$SETBAD(max_y());
 		
 		loop(n) %{
+			types (FD) %{
+				// Additional finite check for float types
+				if (!isfinite($x()) || !isfinite($y())) continue;
+			%}
 			// Only check (and possibly change) if both x and y are good:
-			if ($ISGOOD(x()) && $ISGOOD(y())				/* bad check */
-					&& $x() == $x() && $y() == $y()			/* nan check */
-					&& $x()*0.0 == 0.0 && $y()*0.0 == 0.0	/* inf check */
-				) {
+			if ($ISGOOD(x()) && $ISGOOD(y())) {
 				// It could be that this is the first good value. If so, just
 				// assign the value. Note that either all min/max value are bad,
 				// or they are good, so I only need to check one of them (min_x
@@ -568,7 +594,7 @@ pp_def('minmaxforpair',
 				}
 			}
 		%}
-	},
+	}),
 	Doc => q{
 
 =pod
